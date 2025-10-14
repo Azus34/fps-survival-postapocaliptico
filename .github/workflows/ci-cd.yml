@@ -50,7 +50,7 @@ jobs:
           checkName: PlayMode Test Results
 
       - name: Upload Test Results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: test-results
@@ -90,7 +90,7 @@ jobs:
           buildsPath: builds
 
       - name: Upload Build Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-${{ matrix.targetPlatform }}
           path: builds
@@ -103,7 +103,7 @@ jobs:
 
     steps:
       - name: Download Build Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: build-StandaloneWindows64
           path: builds
