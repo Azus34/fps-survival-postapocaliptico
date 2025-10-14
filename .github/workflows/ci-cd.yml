@@ -18,19 +18,17 @@ jobs:
     name: Run Unity Tests
     runs-on: ubuntu-latest
     steps:
-      - name: Check Unity License secret
-        run: |
-          if [ -z "${{ secrets.UNITY_LICENSE }}" ] && [ -z "${{ secrets.UNITY_SERIAL }}" ]; then
-            echo "ERROR: Unity license not configured. Set UNITY_LICENSE (base64) or UNITY_SERIAL in repository secrets.";
-            exit 1;
-          else
-            echo "Unity license/serial found. Continuing...";
-          fi
-
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           lfs: true
+
+      - name: Validate Unity license/serial
+        run: |
+          if [ -z "${{ secrets.UNITY_LICENSE }}" ] && [ -z "${{ secrets.UNITY_SERIAL }}" ]; then
+            echo "ERROR: Unity license not configured. Set UNITY_LICENSE (base64) or UNITY_SERIAL in repository secrets.";
+            exit 1
+          fi
 
       - name: Cache Unity Library
         uses: actions/cache@v3
@@ -58,20 +56,20 @@ jobs:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           checkName: PlayMode Test Results
 
-      - name: Upload Test Results
+      - name: Ensure test-results folder exists (placeholder if empty)
         if: always()
         run: |
-          # Ensure test-results exists so upload action does not fail with 'No files were found'
-          if [ ! -d test-results ] || [ -z "$(ls -A test-results 2>/dev/null)" ]; then
-            echo "No test results generated; creating placeholder to keep artifact step predictable.";
-            mkdir -p test-results
+          mkdir -p test-results
+          if [ -z "$(ls -A test-results 2>/dev/null)" ]; then
             echo "No test results generated on this run." > test-results/README.txt
           fi
-        - name: Upload Test Results
-          uses: actions/upload-artifact@v4
-          with:
-            name: test-results
-            path: test-results
+
+      - name: Upload test-results artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: test-results
 
   build:
     name: Build Unity Project
