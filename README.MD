@@ -151,7 +151,7 @@ UNITY_PASSWORD   # Password de cuenta Unity
 
 ##  Equipo de Desarrollo
 
-- **Axel Uriel Guzman Sanchez** - Programación Principal - [GitHub](https://github.com/axelguzman)
-- **Gustavo Cruz Zarraga** - Programación y DevOps - [GitHub](https://github.com/gustavocruz)
+- **Axel Uriel Guzman Sanchez** 
+- **Gustavo Cruz Zarraga** 
 
 
